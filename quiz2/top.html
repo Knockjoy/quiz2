@@ -145,6 +145,8 @@ a.btn--yellow:hover {
     <div id="option" class="option box2 fonts">
         <samp class="option2 fonts">option</samp>
 </div>
+    </div>
+</div>
 <!-- script -->
 <script>
   //json
@@ -188,7 +190,7 @@ document.getElementById("fild").innerHTML='<h1 class="fonts">normal quiz</h1><di
     console.log(json);
 
     document.getElementById("fild").innerHTML="";
-    document.getElementById("fild").innerHTML=`<h1>${json["title"]}</h1><div class="box3"><span class="content">0/${Object.keys(json['data']).length}</span></div><br><span style="font-size:2em">${nam+". "+json["data"][nam]["q"]}</span><br><span style="font-size:2em">answer</span><input type="text" class="textbox" onkeypress="hoge(event.keyCode) id="answer" ><a class="btn btn--yellow btn--cubic">enter</a>`;
+    document.getElementById("fild").innerHTML=`<h1>${json["title"]}</h1><div class="box3"><span class="content">0/${Object.keys(json['data']).length}</span></div><br><span style="font-size:2em">${nam+". "+json["data"][nam]["q"]}<span id="marubatu"></span></span><br><span style="font-size:2em">answer</span><input type="text" id="answer" class="textbox" onkeypress="hoge(event.keyCode)"><a class="btn btn--yellow btn--cubic" onclick="answer()">enter</a>`;
   }
  }
    function hoge(code)
@@ -196,7 +198,7 @@ document.getElementById("fild").innerHTML='<h1 class="fonts">normal quiz</h1><di
 	//エンターキー押下なら
 	if(13 === code)
 	{
-		alert("エンターキーが押されたよ！");
+	answer();
 	}
 }
 
@@ -208,15 +210,65 @@ function hoge2(code)
 	start_button()
 	}
 }
+
+function sleep(waitSec, callbackFunc) {
+ 
+ var spanedSec = 0;
+
+ var waitFunc = function () {
+
+     spanedSec++;
+
+     if (spanedSec >= waitSec) {
+         if (callbackFunc) callbackFunc();
+         return;
+     }
+
+     clearTimeout(id);
+     id = setTimeout(waitFunc, 1000);
+ 
+ };
+
+ var id = setTimeout(waitFunc, 1000);
+
+}
+
+
 function answer(){
   var answer=json["data"][nam]["a"];
+  var answer2=document.getElementById("answer").value;
+  if(answer==answer2){
+    document.getElementById("marubatu").innerHTML="◎"
+    points++
+next()
+  }else{document.getElementById("marubatu").innerHTML="×";next()}
 }
 function next(){
+  nam++
 var length=  Object.keys(json['data']).length;
-if(length==nam){
-  document.getElementById("fild").innerHTML="";
-  // document.getElementById("fild").innerHTML=""
+if(length+1==nam){
+sleep(1,function(){document.getElementById("fild").innerHTML=`<div class="box3"><span class="content" style="text-align:inherit;">finish!your points ${points}/${Object.keys(json['data']).length}</span><br><a class="btn btn--yellow btn--cubic" onclick="home()">return home</a></div>`})
+}else{    sleep(1,function(){document.getElementById("fild").innerHTML=`<h1>${json["title"]}</h1><div class="box3"><span class="content">${points}/${Object.keys(json['data']).length}</span></div><br><span style="font-size:2em">${nam+". "+json["data"][nam]["q"]}<span id="marubatu"></span></span><br><span style="font-size:2em">answer</span><input type="text" id="answer" class="textbox" onkeypress="hoge(event.keyCode)"><a class="btn btn--yellow btn--cubic" onclick="answer()">enter</a>`})}
 }
+
+function home(){document.getElementById("fild").innerHTML=`<div id="fild">
+    <h1 class="fonts">Hello QUIZ!!</h1>
+    <div id="bar">
+        <div id="normal" class="option box2" onclick="normal()">
+            <samp class="option2 fonts">normal</samp>
+        </div>
+        <div id="game" class="option box2">
+            <samp class="option2 fonts">game</samp>
+    </div>
+    <div id="option" class="option box2 fonts">
+        <samp class="option2 fonts">option</samp>
+</div>
+    </div>
+</div>`;
+json="";
+points=0;
+nam=1;
+value="";
 }
 </script>
 </body>
